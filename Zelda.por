@@ -4,7 +4,7 @@ programa
   inclua biblioteca Util --> u
   
  cadeia matriz[8][12], direcao = "d", Item = "Nenhum"
- inteiro y = 4, x = 4, fase = 0, x_chave, y_chave
+ inteiro y = 4, x = 4, fase = 0, x_chave, y_chave, x_caixa[3], y_caixa[3]
  logico perdeu = falso, porta_saida = falso, porta_entrada = falso, possui_chave = falso
  
     
@@ -30,7 +30,7 @@ programa
         matriz[i][j] = "+"
         x_chave = j
         y_chave = i
-      }senao se(fase == 1 e (i == 1 ou i == 2) e (j == 1 ou j == 2) e (i != 2 ou j != 2)){
+      }senao se(fase == 1 e validacao_caixa(j, i)){
         matriz[i][j] = "□"
       }senao{
         matriz[i][j] = "."
@@ -45,7 +45,7 @@ programa
     se((fase > 0)){
       matriz[3][0] = "\\"
       matriz[4][0] = "/"
-      porta_saida = verdadeiro
+      porta_entrada = verdadeiro
     }
 }
 
@@ -77,18 +77,48 @@ programa
         possui_chave = falso
         x = 4
         y = 4
-      }senao se(x < 10){
+      }senao se(x < 10 e nao validacao_caixa(x + 1, y)){
         x++
       }
-    }senao se(direcao == "a" e x > 1){
-      x--
-    }senao se(direcao == "w" e y > 1){
+    }senao se(direcao == "a" e x >= 1){
+      se(porta_entrada e (y == 3 ou y == 4) e x == 1){
+        fase--
+        x = 10
+        y = 4
+        possui_chave = falso
+        porta_saida = verdadeiro
+      }senao se(x < 10 e nao validacao_caixa(x - 1, y)){
+        x--
+      }
+    }senao se(direcao == "w" e y > 1 e nao validacao_caixa(x, y - 1)){
       y--
-    }senao se(direcao == "s" e y < 6){
+    }senao se(direcao == "s" e y < 6 e nao validacao_caixa(x, y + 1)){
       y++
+    }senao se(direcao == "1"){
+    	fase = 1
     }
     se(x == x_chave e y == y_chave){
-		  possui_chave = verdadeiro
+	 possui_chave = verdadeiro
     }
+  }
+
+  funcao logico validacao_caixa(inteiro x_, inteiro y_){
+  	se(fase == 1){
+  		x_caixa[0] = 1
+		y_caixa[0] = 1
+		
+		x_caixa[1] = 2
+		y_caixa[1] = 1
+		
+		x_caixa[2] = 1
+		y_caixa[2] = 2
+  	}
+  	logico eh_caixa = falso
+  	para(inteiro i = 0; i < 3; i++){
+	  	se(x_ == x_caixa[i] e y_ == y_caixa[i]){
+	        	eh_caixa = verdadeiro
+	    	}
+  	}
+  	retorne eh_caixa
   }
 }
