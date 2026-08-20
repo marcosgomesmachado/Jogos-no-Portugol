@@ -29,14 +29,14 @@ programa
         }enquanto(opcaoMenu != 3)
     }
 
-    funcao vazio exibirTitulo()
+    funcao exibirTitulo()
     {
         escreva("=========================================\n")
         escreva("        ARQUIVO 13 - CASOS OCULTOS\n")
         escreva("=========================================\n\n")
     }
 
-    funcao vazio exibirMenu()
+    funcao exibirMenu()
     {
         escreva("------------------------------\n")
         escreva("1 - Novo Caso\n")
@@ -46,7 +46,7 @@ programa
         escreva("Escolha uma opcao: ")
     }
 
-    funcao vazio exibirInstrucoes()
+    funcao exibirInstrucoes()
     {
         escreva("\nVoce e um detetive particular chamado para investigar\n")
         escreva("crimes que a policia nao conseguiu resolver.\n")
@@ -55,14 +55,11 @@ programa
         escreva("Digite o numero da opcao desejada e pressione ENTER.\n\n")
     }
 
-    funcao vazio iniciarJogo()
+    funcao iniciarJogo()
     {
-        logico pistaSangue
-        logico pistaBilhete
-        logico pistaTestemunha
-        inteiro escolha1
-        inteiro totalPistas
-
+        logico pistaSangue, pistaBilhete, pistaTestemunha
+        inteiro escolha1, totalPistas
+        
         pistaSangue = falso
         pistaBilhete = falso
         pistaTestemunha = falso
@@ -70,7 +67,8 @@ programa
 
         escreva("\n\n")
         escreva("  _____________________ \n")
-        escreva(" |  X  CENA DO CRIME X | \n")
+        escreva(" |                     | \n")
+        escreva(" |  X  CENA DO CRIME X |  \n")
         escreva(" |_____________________| \n\n")
         escreva("Voce chega a mansao Rosemont. O corpo do Sr. Aldric\n")
         escreva("Rosemont foi encontrado na biblioteca, caido perto\n")
