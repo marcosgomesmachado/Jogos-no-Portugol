@@ -3,9 +3,9 @@ programa
   inclua biblioteca Texto --> txt
   inclua biblioteca Util --> u
   
- cadeia matriz[8][12], direcao = "d", Item = "Nenhum"
- inteiro y = 4, x = 4, fase = 0, x_chave, y_chave
- logico perdeu = falso, porta_saida = falso, porta_entrada = falso, possui_chave = falso
+ cadeia matriz[8][12], direcao = "d", Item = "Nenhum", pos_caixa
+ inteiro y = 4, x = 4, anterior_x = 0, anterior_y = 4, fase = 0, x_chave, y_chave, x_caixa[3], y_caixa[3], aux, caixa_movidax, caixa_moviday
+ logico perdeu = falso, porta_saida = falso, porta_entrada = falso, possui_chave = falso, segurando_caixa = falso
  
     
   funcao inicio(){
@@ -17,6 +17,10 @@ programa
     }
   }
 
+
+
+
+
  funcao define_caractere(){
   para(inteiro i = 0; i < 8; i++){
     para(inteiro j = 0; j < 12; j++){
@@ -26,11 +30,15 @@ programa
         matriz[i][j] = "—"
       }senao se(y == i e x == j){
         matriz[i][j] = "#"
-      }senao se(i == 1 e j == 7 e nao possui_chave){
+      }senao se(fase == 0 e i == 1 e j == 7 e nao possui_chave){
         matriz[i][j] = "+"
         x_chave = j
         y_chave = i
-      }senao se(fase == 1 e (i == 1 ou i == 2) e (j == 1 ou j == 2) e (i != 2 ou j != 2)){
+      }senao se(fase == 1 e i == 1 e j == 7 e nao possui_chave){
+        matriz[i][j] = "+"
+        x_chave = j
+        y_chave = i
+      }senao se(validacao_caixa(j, i)){
         matriz[i][j] = "□"
       }senao{
         matriz[i][j] = "."
@@ -49,6 +57,10 @@ programa
     }
 }
 
+
+
+
+
   funcao desenha_matriz(){
     limpa()
     escreva("== Colete a chave (+) para passsar de nível ==\n")
@@ -65,6 +77,10 @@ programa
     }
   }
 
+
+
+
+
   funcao movimentacao(){
   
     escreva("Movimentação: ")
@@ -77,7 +93,9 @@ programa
         possui_chave = falso
         x = 4
         y = 4
-      }senao se(x < 10){
+      }senao se(x < 10 e nao validacao_caixa(x + 1, y)){
+        anterior_x = x
+        anterior_y = y
         x++
       }
     }senao se(direcao == "a" e x >= 1){
@@ -87,16 +105,98 @@ programa
         y = 4
         possui_chave = falso
         porta_saida = verdadeiro
-      }senao se(x < 10){
+      }senao se(x < 10 e nao validacao_caixa(x - 1, y)){
+        anterior_x = x
+        anterior_y = y
         x--
       }
-    }senao se(direcao == "w" e y > 1){
+    }senao se(direcao == "w" e y > 1 e nao validacao_caixa(x, y - 1)){
+      anterior_x = x
+      anterior_y = y
       y--
-    }senao se(direcao == "s" e y < 6){
+    }senao se(direcao == "s" e y < 6 e nao validacao_caixa(x, y + 1)){
+      anterior_x = x
+      anterior_y = y
       y++
+    }senao se(direcao == "1"){
+    	fase = 1
+    }senao se(direcao == " "){
+    	segurando_caixa = verdadeiro
     }
     se(x == x_chave e y == y_chave){
-		  possui_chave = verdadeiro
+	 possui_chave = verdadeiro
+	 mover_caixa()
     }
   }
+
+
+
+  
+
+ funcao logico validacao_caixa(inteiro x_, inteiro y_){
+  	se(fase == 1 ou segurando_caixa){
+		se(segurando_caixa){
+			x_caixa[2] = anterior_x
+			y_caixa[2] = anterior_y
+  		}senao{
+  			x_caixa[2] = 1
+			y_caixa[2] = 2
+  		}
+  	}
+  	logico eh_caixa = falso
+  	para(inteiro i = 0; i < 3; i++){
+	  	se(x_ == x_caixa[i] e y_ == y_caixa[i]){
+	        	eh_caixa = verdadeiro
+	    	}
+  	}
+  	retorne eh_caixa
+  }
+
+
+
+  
+
+  funcao logico caixa_perto(){
+  	logico tem_caixa = falso
+  	se(validacao_caixa(x, y - 1)){
+  		tem_caixa = verdadeiro
+  		pos_caixa = "cima"
+  	}senao se(validacao_caixa(x, y + 1)){
+  		tem_caixa = verdadeiro
+  		pos_caixa = "baixo"
+  	}senao se(validacao_caixa(x - 1, y)){
+  		tem_caixa = verdadeiro
+  		pos_caixa = "esquerda"
+  	}senao se(validacao_caixa(x + 1, y)){
+  		tem_caixa = verdadeiro
+  		pos_caixa = "direita"
+  	}
+  	retorne tem_caixa
+  }
+
+
+
+	
+	
+	funcao escreva_lento(cadeia texto, inteiro velocidade){
+		inteiro passar_dialogo
+		inteiro numero_caracteres = txt.numero_caracteres(texto)
+
+		para(inteiro i = 0; i < numero_caracteres; i++){
+			escreva(txt.obter_caracter(texto, i))
+			u.aguarde(u.sorteia(velocidade - 50, velocidade + 50))
+		}
+		escreva("\n\nPressione qualquer tecla: ")
+		leia(passar_dialogo)
+	}
+
+
+
+
+
+	funcao mover_caixa(){
+		se(caixa_perto()){
+			Item = "caixa"
+		}
+	}
 }
