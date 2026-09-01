@@ -15,7 +15,8 @@ programa
 
         DesenhaTelaCarregamento()
 
-  	   u.aguarde(500000)
+  	   u.aguarde(2500)
+  	   limpa()
         exibirTitulo()
 
         faca
@@ -97,7 +98,7 @@ funcao DesenhaTelaCarregamento()
 
 		progresso = progresso + 10
 
-		u.aguarde(800)
+		u.aguarde(650)
 	}
 }
 
@@ -105,7 +106,7 @@ funcao DesenhaTelaCarregamento()
     funcao exibirTitulo()
     {
         escreva("=========================================\n")
-        escreva("        ARQUIVO 13 - CASOS OCULTOS\n")
+        escreva("        ARQUIVO 14 - CASOS OCULTOS\n")
         escreva("=========================================\n\n")
     }
 
@@ -131,6 +132,7 @@ funcao DesenhaTelaCarregamento()
     funcao iniciarJogo()
     {
         logico pistaSangue, pistaBilhete, pistaTestemunha, QuadroNotado, DocumentoEncontrado
+        caracter InvestigarMais, PegarPapel, GuardarPapel
         inteiro escolha1, totalPistas
         
         pistaSangue = falso
@@ -165,8 +167,8 @@ funcao DesenhaTelaCarregamento()
                     se(pistaSangue == falso)
                     {
                         escreva("\nAs manchas indicam que o corpo foi arrastado\n")
-                        escreva("cerca de dois metros antes de parar na lareira.\n")
-                        escreva("Você percebe")
+                        escreva("cerca de dois metros antes de parar na lareira, logo abaixo de um quadro levemente torto.\n")
+                        
                         pistaSangue = verdadeiro
                     }
                     senao
@@ -198,7 +200,35 @@ funcao DesenhaTelaCarregamento()
                         escreva("\nEla não tem mais nada a dizer.\n")
                     }
                 pare
-                caso 4:
+
+			caso 4:
+				se (QuadroNotado == falso){
+                        		escreva("Quer examinar mais: [s/n] ")
+                        		leia(InvestigarMais)
+                        		se (InvestigarMais == 's'){
+                        			QuadroNotado = verdadeiro
+                        			escreva("Ao investigar mais vc encosta no quadro, \n")
+                        			escreva("ele acaba caindo no chao e revelando um \n")
+                        			escreva("compartimento secreto na parede, onde vc\n")
+                        			escreva("olha e encontra uma folha de pepel.\n")
+                        			escreva("Quer pegar o papel? [s/n] ")
+                        			leia(PegarPapel)
+                        			se (PegarPapel == 's'){
+                        				DocumentoEncontrado = verdadeiro
+                    				se (DocumentoEncontrado e QuadroNotado){
+                    					escreva("Ao examinar o documento vc percebe que\n")
+                    					escreva("o mesmo eh uma certidao de nascimento,\n")
+                    					escreva("que estava rasgada, nao revelando o pai\n")
+                    					escreva("da criança, apenas a mae dela.\n")
+                    					escreva("Quer guardar o papel? [s/n] ")
+                    					leia(GuardarPapel)
+                    					
+                    				}
+                        			}
+                        		}
+                        }
+                
+                caso 5:
                     escreva("\nVocê decide que já tem informaçôes suficientes.\n")
                 pare
                 caso contrario:
